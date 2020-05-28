@@ -13,6 +13,7 @@ while x != 0:
 	print(ord(x))
 	x=ser.read()
 """             # close port
-s = serial.Serial('COM4')
+ser = serial.Serial('COM4', 9600, timeout=10, rtscts=0, parity=serial.PARITY_NONE, stopbits=serial.STOPBITS_ONE, bytesize=serial.EIGHTBITS, xonxoff=False)
+ser.write(b'A\r')
 res = s.read()
 print(res)
