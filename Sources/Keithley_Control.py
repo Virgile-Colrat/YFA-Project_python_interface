@@ -4,10 +4,10 @@
 #  SMU A controls the drain of a FET   SMU B controls the gate
 #
 
-from pyvisa import *                                      #import NI Virtual Instrument Software Architecture
-from visa import *
+#from pyvisa import *                                      #import NI Virtual Instrument Software Architecture
+import visa
 import time                                      #import python time functionality
-A = instrument("GPIB::16")                  #create variable for instrument address
+A = visa.instrument("GPIB::16")                  #create variable for instrument address
 #B = visa.instrument("GPIB::17") 
                                                                  #variable for voltage
 stepvoltage = -1.0
