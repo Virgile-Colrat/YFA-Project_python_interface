@@ -5,11 +5,15 @@
 #
 
 #from pyvisa import *                                      #import NI Virtual Instrument Software Architecture
-import visa
+import pyvisa
 import time                                      #import python time functionality
-A = visa.instrument("GPIB::16")                  #create variable for instrument address
+rm = pyvisa.ResourceManager()
+
+A = rm.open_resource("GPIB::16::INSTR")                  #create variable for instrument address
+A.write("*rst; status:preset; *cls")
 #B = visa.instrument("GPIB::17") 
                                                                  #variable for voltage
+
 stepvoltage = -1.0
 sweeploopcount = 16
 steploopcount = 5

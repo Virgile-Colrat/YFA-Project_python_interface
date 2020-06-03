@@ -1,0 +1,24 @@
+{
+    "Header": {
+        "Comment": "All values are metric (mm)",
+        "CreationDate": "2020-06-02T19:58:31Z",
+        "GenerationSoftware": {
+            "Application": "EAGLE",
+            "Vendor": "Autodesk",
+            "Version": "9.5.2"
+        },
+        "Part": "Single"
+    },
+    "Overall": {
+        "BoardThickness": 1.640844,
+        "LayerNumber": 4,
+        "Name": {
+            "ProjectId": "jerry_v1"
+        },
+        "Owner": "Thomas Becnel <u0668404@utah.edu>",
+        "Size": {
+            "X": 38.1,
+            "Y": 54.6608
+        }
+    }
+}

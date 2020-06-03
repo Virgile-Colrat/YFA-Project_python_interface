@@ -3,7 +3,7 @@ import time
 import binascii
 import moduleTest
 comds=[b'N\r',b'O\r',b'Q\r', b'R\r', b'S\r', b'T\r', b'U\r',b'V\r', b'W\r', b'X\r', b'Y\r', b'Z\r']
-ser = serial.Serial('/dev/ttyUSB0', 9600, timeout=10, rtscts=0, parity=serial.PARITY_NONE, stopbits=serial.STOPBITS_ONE, bytesize=serial.EIGHTBITS, xonxoff=False)
+ser = serial.Serial('COM4', 9600, timeout=10, rtscts=0, parity=serial.PARITY_NONE, stopbits=serial.STOPBITS_ONE, bytesize=serial.EIGHTBITS, xonxoff=False)
 ligne=["","","","","","",""]#["Time","Sample number","Temperature","Humidity","Sensor response", "PM response", "Temperature MFC"]
 data=["","","","","","","","","",""]
 #ser.write(b'E\r')
@@ -12,9 +12,10 @@ data=["","","","","","","","","",""]
 def conversion(MSB, LSB):
 	result=(MSB*255+LSB)/10
 	return result
+
 moduleTest.createfile()
 r=0
-while r<60:
+while r<5:
 	ser.write(b'A\r')
 	#time.sleep(1)
 	"""for i in comds:
