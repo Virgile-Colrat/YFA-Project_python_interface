@@ -4,13 +4,13 @@ Header=["Time","Sample number","Temperature","Humidity","Sensor response", "PM r
 
 def inp(filename,line, i):
 	filename=filename+'.csv'
-	with open(filename,'a') as main:
+	with open(filename,'a', newline='') as main:
 		csv_writer=csv.writer(main, delimiter=",")
 		line[0]=datetime.now()
 		line[1]=i
 		csv_writer.writerow(line)
 def createfile(filename):
 	filename=filename+'.csv'
-	with open(filename,'w') as main:
+	with open(filename,'w', newline='') as main:
 		csv_writer=csv.writer(main, delimiter=",")
 		csv_writer.writerow(Header)
