@@ -17,7 +17,6 @@
 
 
 import serial
-
 #########################################################
 ##                 basic functions                     ##
 ##  The following functions are the direct application ##
@@ -59,8 +58,22 @@ def SetStreamInterval(comPort, iD, timeInterval):
 def SetSetpoint(comPort, flowSetpoint):
 	message="as"+str(flowSetpoint)
 	res =''.join(format(ord(i), 'b') for i in message)
+	#res=serialcmd.encode()
+	res=str.encode(message)
 	comPort.write(res)
 
+def ChangeId(comPort):
+	string="A@=B"
+	res=string.encode()
+	arr = bytes(string, 'utf-8')
+	arr2 = bytes(string, 'ascii')
+	arr3 = bytes(string, 'ansi')
+	comPort.write(res)
+	comPort.write(arr)
+	comPort.write(arr2)
+	comPort.write(arr3)
+	comPort.write(b'A@=B')
+	print("ok ?")
 #########################################################
 ##               Advanced functions                    ##
 #########################################################  
@@ -69,4 +82,4 @@ def streamData(comPort, iD, timeInterval, flowSetpoint):
 	SetStreamInterval(comPort, iD, timeInterval)
 	BeginStream(comPort, iD)
 	SetSetpoint(comPort, flowSetpoint)
-	
+

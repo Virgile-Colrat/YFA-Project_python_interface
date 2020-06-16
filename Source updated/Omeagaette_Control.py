@@ -3,7 +3,7 @@ import time
 import binascii
 import moduleTest
 comds=[b'N\r',b'O\r',b'Q\r', b'R\r', b'S\r', b'T\r', b'U\r',b'V\r', b'W\r', b'X\r', b'Y\r', b'Z\r']
-ligne=["","","","","","","","",""]#["Time","Sample number","Temperature","Humidity","Sensor response", "PM response", "Temperature MFC", "Current (nanofiber)", "Voltage (nanofiber)"] 9 arguments
+ligne=["","","","","","","","",""]#["Time","Sample number","Temperature (°C)","Humidity (%RH)","Sensor response (Ohm)", "PM response", "Temperature MFC (°C)", "Nanofiber current (A)", "nanofiber polarisation voltage (V)"] 9 arguments
 data=["","","","","","","","","",""]
 
 def OpenOmegaette():
