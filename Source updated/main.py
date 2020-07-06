@@ -37,6 +37,13 @@ filename="results"                                          #names the file in w
 rm = pyvisa.ResourceManager()
 polarisationVoltage=1.8
 numberMeasures=100
+
+MFC1=
+MFC2=
+MFC3=
+Permeation_Oven=
+Power_supply=
+Omeagaette=
 #keithley=0
 #omegaette=0
 #flow_controller=0
