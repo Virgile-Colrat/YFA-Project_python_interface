@@ -87,7 +87,10 @@ def TestMFC():
 def TestPermeation():
     port=Permeation_Oven_Control.OpenVici('COM13')
     Permeation_Oven_Control.readTemperature(port)
-TestPermeation()
+def wait(duration):
+    time.sleep(duration)
+#TestPermeation()
+
 #comPort="COM16"
 #ser=MFC_Control.OpenMFC(comPort)
 #MFC_Control.ChangeId(ser)
