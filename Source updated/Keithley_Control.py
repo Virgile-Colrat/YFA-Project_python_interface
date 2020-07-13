@@ -10,7 +10,7 @@
 #A detailed list of all the commands available to the Keithley 236
 #instrument can be found here:
 #https://www.tek.com/manual/model-236-237-238-source-measure-units-operators-manual-rev-e-13-mb
-#There is 2 types of function in this module, the basic function (found in instrument
+#There are 2 types of function in this module, the basic function (found in instrument
 # documentation) and "advance" function that are a combination of basic function and are used
 #to simplify the use of the instrument in this experiment
 #-------------------------------------------------------------------

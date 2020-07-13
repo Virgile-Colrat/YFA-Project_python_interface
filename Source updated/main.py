@@ -35,15 +35,15 @@ from alicat import FlowController
 
 filename="results"                                          #names the file in which the results are stored 
 rm = pyvisa.ResourceManager()
-polarisationVoltage=1.8
-numberMeasures=100
+polarisationVoltage=-4.096
+numberMeasures=1000
 
-MFC1=
-MFC2=
-MFC3=
-Permeation_Oven=
-Power_supply=
-Omeagaette=
+MFC1=FlowController(port='COM16', address='A')
+#MFC2=
+#MFC3=
+#Permeation_Oven=
+keithley=rm.open_resource("GPIB::16::INSTR")
+Omegaette=Omeagaette_Control.OpenOmegaette()
 #keithley=0
 #omegaette=0
 #flow_controller=0
@@ -64,38 +64,48 @@ Omeagaette=
 #########################################################
 ##                   begin experiment                  ##
 #########################################################  
-'''
+
 def Experiment():
+    Keithley.SetVoltage(keithley, polarisationVoltage)
+    moduleTest.createfile(filename) 
     for i in range(numberMeasures):
-        ligne=Omeagaette_Control.MeasureAndReturn(omegaette)    #Takes measurment of humidity and tempertaure from the Omegaette instrument
+        ligne=Omeagaette_Control.MeasureAndReturn(Omegaette)    #Takes measurment of humidity and tempertaure from the Omegaette instrument
         returnKeithley=Keithley.MeasureAndReturn(keithley, 0)   #Takes measurment of current and voltage from the Keithley 236
         returnKeithley=returnKeithley[:24]                      #Eliminates the '\r\n' at the end of the data sent back by the Keithley 236
-        ligne[6]=flow_controller_A.get()["temperature"]           #fills the MFC temperature box in the line that will be logged
+        ligne[6]=MFC1.get()["temperature"]           #fills the MFC temperature box in the line that will be logged
         ligne[7]=returnKeithley[13:]                            #fills the current box in the line that will be logged
         ligne[8]=returnKeithley[0:11]                           #fills the voltage box in the line that will be logged
         ligne[4]=float(returnKeithley[14:])/float(returnKeithley[1:11])
+        print(ligne[7])
+        print(ligne[8])
+        print(ligne[4])
         #print(returnKeithley[0])
+        
+        '''
         print(i)
-        print("measure MFC temperature"+str(flow_controller_A.get()["temperature"]))
+        print("measure MFC temperature"+str(MFC1.get()["temperature"]))
         print("measure Keithley unit: "+str(returnKeithley))    #print voltage and current for debug
         print("measure humidity: "+str(ligne[3]))               #print humidity for debug
-        print("measure temperature: "+str(ligne[2]))            #print temperature for debug
+        print("measure temperature: "+str(ligne[2]))            #print temperature for debug'''
         moduleTest.inp(filename, ligne, i)                      #saves all the data in the "filename.csv" file '''
+    rm.close()
 #########################################################
 ##                   end experiment                    ##
 #########################################################  
 #Keithley.MeasureAndPrint(A, 0.5, 10)
-
+'''
 def TestMFC():
     comPort="COM16"
     #flow_controller = FlowController(port=comPort)
-    flow_controller = FlowController(port='COM16', address='A')
+    flow_controller = FlowController(port=comPort, address='A')
     print(flow_controller.get())
+
 def TestPermeation():
     port=Permeation_Oven_Control.OpenVici('COM13')
     Permeation_Oven_Control.readTemperature(port)
 def wait(duration):
     time.sleep(duration)
+'''
 #TestPermeation()
 
 #comPort="COM16"
@@ -103,4 +113,5 @@ def wait(duration):
 #MFC_Control.ChangeId(ser)
 #TestMFC()
 #SetupExperiment()
-#Experiment()
+Experiment()
+#Omeagaette_Control.MeasureAndReturn(Omegaette)
