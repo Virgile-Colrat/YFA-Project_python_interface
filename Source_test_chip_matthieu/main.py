@@ -48,7 +48,7 @@ ligne=["","",""]
 #########################################################  
 
 keithley = rm.open_resource("GPIB::16::INSTR")               #create variable for instrument address
-STM32= serial.Serial('COM8', 9600, timeout=10, rtscts=0, parity=serial.PARITY_NONE, stopbits=serial.STOPBITS_ONE, bytesize=serial.EIGHTBITS, xonxoff=False)#Opens stm32 com port
+STM32= serial.Serial('COM8', 209700, timeout=10, rtscts=0, parity=serial.PARITY_NONE, stopbits=serial.STOPBITS_ONE, bytesize=serial.EIGHTBITS, xonxoff=False)#Opens stm32 com port
 #########################################################
 ##                   end setup                         ##
 #########################################################  
@@ -61,8 +61,14 @@ def Experiment():
     #Keithley.SetCurrent(keithley, polarisationCurrent)
     moduleTest.createfile(filename) 
     while 1:
-        outComp=STM32.read(1)
-        #print(outComp)
+        STM32Val=STM32.read(1)
+        if STM32Val==b'1':
+            outComp=1
+            print(outComp)
+        elif STM32Val==b'0':
+            outComp=0
+            print(outComp)
+    
         #########################################################
         ##                   begin PID                         ##
         ######################################################### 
@@ -82,7 +88,7 @@ def Experiment():
             print("/!\ Overvoltage")
         #print(returnKeithley[0])
         
-        moduleTest.inp(filename, ligne, i)                      #saves all the data in the "filename.csv" file '''
+        moduleTest.inp(filename, ligne, i)                      #saves all the data in the "filename.csv" file 
     rm.close()
 #########################################################
 ##                   end experiment                    ##
