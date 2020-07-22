@@ -1,7 +1,7 @@
 import csv
 from datetime import datetime
-#Header=["Time","Sample number","Temperature (°C)","Humidity (%RH)","Sensor response (Ohm)", "PM response", "Temperature MFC (°C)", "Nanofiber current (A)", "Nanofiber voltage (V)"]
-Header=["time","Sample number", "Voltage", "Current"]
+Header=["Time","Sample number","Temperature (°C)","Humidity (%RH)","Sensor response (Ohm)", "PM response", "Temperature MFC (°C)", "Nanofiber current (mA)", "Nanofiber voltage (V)"]
+
 def inp(filename,line, i):
 	filename=filename+'.csv'
 	with open(filename,'a', newline='') as main:

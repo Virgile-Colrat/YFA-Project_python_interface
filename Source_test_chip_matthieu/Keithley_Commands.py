@@ -212,10 +212,10 @@ def SetVoltage(instr, voltage):
 
 
 def SetCurrent(instr, current):
-    SourceAndFunction(instr, 0,0)
+    SourceAndFunction(instr, 1,0)
     IEEEImmediateTrigger(instr) 
     OutputDataFormat(instr,5, 2, 0)
-    BiasOperation(instr,current, 1, 0)
+    BiasOperation(instr,current, 0, 0)
 
 #def SetVoltageDegra(instr, voltage):
 #    instr.write("F0,0X")                                 # Force Force V measure I

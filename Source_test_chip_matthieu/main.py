@@ -41,7 +41,7 @@ polarisationVoltage=-4.096
 polarisationCurrent=60                                      #polarisation current
 
 
-ligne=["","",""]
+ligne=["","","","","res"]
 
 #########################################################
 ##                   begin setup                       ##
@@ -56,39 +56,84 @@ STM32= serial.Serial('COM8', 209700, timeout=10, rtscts=0, parity=serial.PARITY_
 #########################################################
 ##                   begin experiment                  ##
 #########################################################  
+def PID(In, InPrev):
+    Fs=250000
+    Ts=1/Fs
+    I=Fs*128/4096
+    D=128*16384/Fs
+
+    P=0.5
+    N=3
+    PIDOut=int(In)*(P+(I*Ts/InPrev)+D*N/(1+N*Ts/InPrev))
+    if PIDOut>=256:
+        PIDOut=256
+    return PIDOut
+
 
 def Experiment():
     #Keithley.SetCurrent(keithley, polarisationCurrent)
+    InPrev=128
+    i=0
+    previousVoltage=0
     moduleTest.createfile(filename) 
+    values=[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
     while 1:
-        STM32Val=STM32.read(1)
-        if STM32Val==b'1':
-            outComp=1
-            print(outComp)
-        elif STM32Val==b'0':
-            outComp=0
-            print(outComp)
-    
-        #########################################################
-        ##                   begin PID                         ##
-        ######################################################### 
-
-        #########################################################
-        ##                    end PID                          ##
-        ######################################################### 
-
-        Keithley.SetCurrent(keithley, polarisationCurrent)
-        returnKeithley=Keithley.MeasureAndReturn(keithley, 0)   #Takes measurment of current and voltage from the Keithley 236
-        returnKeithley=returnKeithley[:24]                      #Eliminates the '\r\n' at the end of the data sent back by the Keithley 236
-        ligne[1]=returnKeithley[13:]                            #fills the current box in the line that will be logged
-        ligne[2]=returnKeithley[0:11]                           #fills the voltage box in the line that will be logged
         
-        if int(ligne[2])>1.8:
-            Keithley.SetCurrent(keithley, 0)
-            print("/!\ Overvoltage")
-        #print(returnKeithley[0])
-        
-        moduleTest.inp(filename, ligne, i)                      #saves all the data in the "filename.csv" file 
+        for i in range(31):
+            #print("i=",i)
+            #TM32= serial.Serial('COM8', 209700, timeout=10, rtscts=0, parity=serial.PARITY_NONE, stopbits=serial.STOPBITS_ONE, bytesize=serial.EIGHTBITS, xonxoff=False)#Opens stm32 com port
+            outComp=STM32.read()
+            if outComp!=b'\x00':
+                #if STM32Val==b'1':
+                #    outComp=1
+                #    print(outComp)
+                #elif STM32Val==b'0':
+                #    outComp=0
+                #    print(outComp)
+                #print(outComp)
+            
+                #########################################################
+                ##                   begin PID                         ##
+                ######################################################### 
+                outPid=PID(outComp, InPrev)*0.000000001
+                InPrev=outPid
+                if InPrev<=0:
+                    InPrev=1
+                #print(outPid)
+                values[i]=outPid
+                #########################################################
+                ##                    end PID                          ##
+                ######################################################### 
+                
+                outCurrent=outPid*47
+                Keithley.SetCurrent(keithley, outCurrent)
+                returnKeithley=Keithley.MeasureAndReturn(keithley, 0)   #Takes measurment of current and voltage from the Keithley 236
+                returnKeithley=returnKeithley[:24]                      #Eliminates the '\r\n' at the end of the data sent back by the Keithley 236
+                ligne[2]=returnKeithley[13:]                            #fills the current box in the line that will be logged
+                ligne[3]=returnKeithley[0:11]                           #fills the voltage box in the line that will be logged
+                
+                #valueVoltage=int(ligne[2][1:6])*10^int(ligne[2][9:10])
+                val=float(ligne[2][1:6])
+                exp=int(ligne[2][9:10])
+                valueVoltage=float(val*(10**exp))
+                #print("voltage: ", valueVoltage)
+
+
+                '''
+                if valueVoltage>1.8:
+                    Keithley.SetVoltage(keithley,previousVoltage)
+                    print("/!\ Overvoltage")
+                else:
+                    previousVoltage=valueVoltage
+                #print(returnKeithley[0])'''
+                i+=1
+                moduleTest.inp(filename, ligne, i)                      #saves all the data in the "filename.csv" file 
+            average=1
+            for i in values:
+                average=average+i
+            average=average/32
+            resistance=6000/average
+            #print("resistance =",resistance)
     rm.close()
 #########################################################
 ##                   end experiment                    ##
