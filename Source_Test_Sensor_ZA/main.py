@@ -33,9 +33,9 @@ import MFC_Control
 import Permeation_Oven_Control
 from alicat import FlowController
 
-filename="results"                                          #names the file in which the results are stored 
+filename="results-054"                                          #names the file in which the results are stored 
 rm = pyvisa.ResourceManager()
-polarisationVoltage=7                                  #7V ?!
+polarisationVoltage=7                                 #7V ?!
 numberMeasures=10
 
 #########################################################
@@ -46,7 +46,7 @@ keithley = rm.open_resource("GPIB::16::INSTR")              #create variable for
 Keithley.SetVoltage(keithley, polarisationVoltage)          #sets the voltage of the Keithley unit at "polarisationVoltage"
 omegaette=Omeagaette_Control.OpenOmegaette()                #opens the serial com with the Omegaette HH314 (humidty and temperature measurments)
 moduleTest.createfile(filename)                             #creates the results file in format .csv
-flow_controller_A = FlowController(port='COM13', address='A') ##opens the serial com with the MFC
+flow_controller_A = FlowController(port='COM16', address='A') ##opens the serial com with the MFC
 flow_controller_A.set_flow_rate(0)                          #Closes the MFC (flowrate=0)
 
 #########################################################
@@ -59,6 +59,7 @@ flow_controller_A.set_flow_rate(0)                          #Closes the MFC (flo
 
 def Experiment():
     print("MFC openned")
+    time.sleep(300)
     for i in range(numberMeasures):
         flow_controller_A.set_flow_rate(100)
         ligne=Omeagaette_Control.MeasureAndReturn(omegaette)    #Takes measurment of humidity and tempertaure from the Omegaette instrument
@@ -70,7 +71,7 @@ def Experiment():
         ligne[7]=returnKeithley[13:]                            #fills the current box in the line that will be logged
 
         ligne[8]=returnKeithley[0:11]                           #fills the voltage box in the line that will be logged
-        ligne[4]=float(float(returnKeithley[14:])/float(returnKeithley[1:11]))
+        ligne[4]=float(float(returnKeithley[1:11])/float(returnKeithley[14:]))
         #time.sleep(1)
         #print(ligne[7])
         #print(ligne[8])
