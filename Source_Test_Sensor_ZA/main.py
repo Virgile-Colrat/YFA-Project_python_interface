@@ -79,6 +79,7 @@ def Experiment():
         #print(returnKeithley[0])
         print(i*100/numberMeasures,"%")
         '''
+        
         print(i)
         print("measure MFC temperature"+str(MFC1.get()["temperature"]))
         print("measure Keithley unit: "+str(returnKeithley))    #print voltage and current for debug
