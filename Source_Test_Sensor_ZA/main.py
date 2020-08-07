@@ -33,10 +33,10 @@ import MFC_Control
 import Permeation_Oven_Control
 from alicat import FlowController
 
-filename="results-054"                                          #names the file in which the results are stored 
+filename="results-076.2-variable_temp_LED_2.30"                                          #names the file in which the results are stored 
 rm = pyvisa.ResourceManager()
 polarisationVoltage=7                                 #7V ?!
-numberMeasures=10
+numberMeasures=3000
 
 #########################################################
 ##                   begin setup                       ##
@@ -46,38 +46,42 @@ keithley = rm.open_resource("GPIB::16::INSTR")              #create variable for
 Keithley.SetVoltage(keithley, polarisationVoltage)          #sets the voltage of the Keithley unit at "polarisationVoltage"
 omegaette=Omeagaette_Control.OpenOmegaette()                #opens the serial com with the Omegaette HH314 (humidty and temperature measurments)
 moduleTest.createfile(filename)                             #creates the results file in format .csv
-flow_controller_A = FlowController(port='COM16', address='A') ##opens the serial com with the MFC
+flow_controller_A = FlowController(port='COM13', address='A') #opens the serial com with the MFC
 flow_controller_A.set_flow_rate(0)                          #Closes the MFC (flowrate=0)
+
+
 
 #########################################################
 ##                   end setup                         ##
 #########################################################  
+
 
 #########################################################
 ##                   begin experiment                  ##
 #########################################################  
 
 def Experiment():
+    
     print("MFC openned")
-    time.sleep(300)
+    time.sleep(300)                                             #Equilibration time ~5 minutes @7V 
     for i in range(numberMeasures):
         flow_controller_A.set_flow_rate(100)
         ligne=Omeagaette_Control.MeasureAndReturn(omegaette)    #Takes measurment of humidity and tempertaure from the Omegaette instrument
         returnKeithley=Keithley.MeasureAndReturn(keithley, 0)   #Takes measurment of current and voltage from the Keithley 236
         returnKeithley=returnKeithley[:24]                      #Eliminates the '\r\n' at the end of the data sent back by the Keithley 236
-        ligne[6]=float(flow_controller_A.get()["temperature"])           #fills the MFC temperature box in the line that will be logged
+        ligne[6]=float(flow_controller_A.get()["temperature"])  #Fills the MFC temperature box in the line that will be logged
         
-        
-        ligne[7]=returnKeithley[13:]                            #fills the current box in the line that will be logged
+        ligne[7]=returnKeithley[13:]                            #Fills the current box in the line that will be logged
 
-        ligne[8]=returnKeithley[0:11]                           #fills the voltage box in the line that will be logged
+        ligne[8]=returnKeithley[0:11]                           #Fills the voltage box in the line that will be logged
         ligne[4]=float(float(returnKeithley[1:11])/float(returnKeithley[14:]))
-        #time.sleep(1)
+        time.sleep(0.5)
         #print(ligne[7])
         #print(ligne[8])
         #print(ligne[4])
         #print(returnKeithley[0])
         print(i*100/numberMeasures,"%")
+        
         '''
         
         print(i)
@@ -86,9 +90,10 @@ def Experiment():
         print("measure humidity: "+str(ligne[3]))               #print humidity for debug
         print("measure temperature: "+str(ligne[2]))            #print temperature for debug'''
         moduleTest.inp(filename, ligne, i)                      #saves all the data in the "filename.csv" file '''
-    rm.close()
+    rm.close()                                                  #closes the communication with the keithley
     flow_controller_A.set_flow_rate(0)
     print("Experiment finnished, MFC closed")
+
 #########################################################
 ##                   end experiment                    ##
 #########################################################  
