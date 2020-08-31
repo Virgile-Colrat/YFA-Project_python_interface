@@ -13,6 +13,7 @@ def OpenOmegaette():
 #ser.write(b'E\r')
 #time.sleep(1)
 
+
 def conversion(MSB, LSB):
 	result=(MSB*255+LSB)/10
 	return result

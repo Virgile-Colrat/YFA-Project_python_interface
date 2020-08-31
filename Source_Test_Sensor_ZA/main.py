@@ -39,6 +39,34 @@ polarisationVoltage=7                                 #7V ?!
 numberMeasures=100
 
 #########################################################
+##           Begin experiement options                 ##
+######################################################### 
+
+#varaibleHumidity=1: humidity will vary throughtout the experiment
+#variableTemperature=1: temperature will vary throughtout the experiment
+variableHumidity=True
+variableTemperature=True
+
+tempConst=20                                                #maintains Temperature at value (in °C) if variableTemperature=False
+HumidityConst=20                                            #maintains Humidity at this value (in %RH) if variableHumidity=False
+
+temperatureMin=20
+temperatureMax=50
+
+humidityMin=20
+humidityMax=60
+
+#tempVariation=0: temp increseas from  temperatureMin to temperatureMax if variableTemperature=True
+#tempVariation=1: temp decreseas from  temperatureMax to temperatureMin if variableTemperature=True
+tempVariation=0    
+
+#tempVariation=0: humidity increseas from  humidityMin to humidityMax if variableHumidity=True
+#tempVariation=1: humidity decreseas from  humidityMax to humidityMin if variableHumidity=True
+humidityVariation=0
+
+
+
+#########################################################
 ##                   begin setup                       ##
 #########################################################  
 
