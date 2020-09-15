@@ -35,7 +35,7 @@ from alicat import FlowController
 
 filename="results_noise_caracterization_res"                                          #names the file in which the results are stored 
 rm = pyvisa.ResourceManager()
-polarisationVoltage=2.2                                
+polarisationVoltage=10                                
 numberMeasures=50
 ligne=["","","","","","","","",""]
 
