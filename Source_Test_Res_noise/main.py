@@ -33,10 +33,10 @@ import MFC_Control
 import Permeation_Oven_Control
 from alicat import FlowController
 
-filename="results_noise_caracterization"                                          #names the file in which the results are stored 
+filename="results_noise_caracterization_res"                                          #names the file in which the results are stored 
 rm = pyvisa.ResourceManager()
 polarisationVoltage=1                                
-numberMeasures=10000
+numberMeasures=50
 ligne=["","","","","","","","",""]
 
 #########################################################
